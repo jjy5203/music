@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Document</title>
-  <link rel="stylesheet" href="./jedate-6.5.0(1)/skin/jedate.css">
   <style>
     body,
     ul,
@@ -54,18 +53,7 @@
       margin-left: 23px;
     }
 
-    .search_bar .inputOne {
-      margin-right: 23px;
-      width: 200px;
-      height: 34px;
-      border-radius: 17px;
-      border: 0px;
-      text-indent: 15px;
-      outline: none;
-      background-color:rgba(255, 255, 255, 0.45)
-    }
-
-    .search_bar .inputTwo {
+    .search_bar input {
       margin-right: 23px;
       width: 296px;
       height: 34px;
@@ -271,8 +259,7 @@
     <div class="play_wrap" id="player">
       <div class="search_bar">
         <img src="images/player_title.png" alt="" />
-        <input class="dateinput dateicon inputOne" id="test1" type="text" placeholder="YYYY年MM月DD日 hh:mm:ss" readonly>
-        <input type="text" class="inputTwo" v-model.trim="search" v-focus @keyup.enter="searchMusic" />
+        <input type="text" v-model.trim="search" v-focus @keyup.enter="searchMusic" />
       </div>
       <div class="center_con">
         <div class="song_wrapper" style="overflow: hidden">
@@ -320,19 +307,7 @@
   <script src="./node_modules/axios/dist/axios.min.js"></script>
 
   <script src="./lib/iscroll.js"></script>
-
-  <script src="./lib/jquery-1.12.4.js"></script>
-  <script src="./jedate-6.5.0(1)/dist/jedate.min.js"></script>
-  
   <script>
-    $(function () {
-       
-           //绿色主题色
-    jeDate("#test1",{
-        theme:{bgcolor:"#00A680",pnColor:"#00DDAA"},
-        format: "YYYY-MM-DD hh:mm:ss"
-    });
-    }); 
     // const axios= require('axios')
     const vm = new Vue({
       el: '#app',
