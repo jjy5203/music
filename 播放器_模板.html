@@ -227,6 +227,26 @@
     [v-cloak] {
       display: none;
     }
+
+    /* 列表动画样式 */
+    .list-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .list-enter-active,
+    .list-leave-active {
+      transition: all 1s;
+    }
+
+    .list-enter,
+    .list-leave-to
+
+    /* .list-leave-active for below version 2.1.8 */
+      {
+      opacity: 0;
+      transform: translateX(50px);
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
@@ -243,12 +263,16 @@
       </div>
       <div class="center_con">
         <div class="song_wrapper">
-          <ul class="song_list" style="overflow:hidden">
-            <li v-cloak v-for="(item, index) in musicList" :key="index" @click="playMusic(item)">
+          <!-- 添加列表动画效果 -->
+          <transition-group name="list" tag="ul" class="song_list" v-on:after-enter="afterEnter">
+            <li v-cloak v-for="(item, index) in musicList" :key="index" @click="playMusic(item)" 
+            :style="{transitinDelay:index*50+'ms'}"
+            >
               {{item.name}}---{{item.artists[0].name}}
             </li>
+          </transition-group>
 
-          </ul>
+
         </div>
         <div class="player_con">
           <img src="images/player_bar.png" class="play_bar " :class="{playing:isPlay}" />
@@ -277,27 +301,33 @@
   </div>
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
    -->
-<script src="./node_modules/axios/dist/axios.min.js"></script>
+  <script src="./node_modules/axios/dist/axios.min.js"></script>
   <script>
     // const axios= require('axios')
     const vm = new Vue({
       el: '#app',
       data: {
+        //搜索框
         search: '',
+        //歌曲列表
         musicList: [],
+        //播放状态
         isPlay: false,
-        musicSrc: '',
-        imgUrl: '',
+        //歌曲播放地址
         musicUrl: '',
-        isPlay: false,
+
+        //封面地址
+        imgUrl: '',
+
 
 
       },
       methods: {
+        //搜索事件
         searchMusic() {
           musicList = []
           // .get('https://autumnfish.cn/search?keywords=' + this.search)
-
+          //获取歌曲列表
           axios.get('https://autumnfish.cn/search', {
               params: {
                 keywords: this.search
@@ -313,8 +343,9 @@
         playMusic(item) {
           console.log(item.id)
           // Make a request for a user with a given ID
+          //获取歌曲列表
           axios.get(`https://autumnfish.cn/song/url?id=${item.id}`)
-            .then( (res)=> {
+            .then((res) => {
               // handle succes
               this.musicUrl = res.data.data[0].url
             })
@@ -322,35 +353,39 @@
               // handle error
               console.log(err);
             })
-
-            axios.get(`https://autumnfish.cn/album?id=${item.album.id}`)
-            .then( (res)=> {
+          //获取封面地址
+          axios.get(`https://autumnfish.cn/album?id=${item.album.id}`)
+            .then((res) => {
               // handle succes
               console.log(res);
-
-              
               this.imgUrl = res.data.album.blurPicUrl
               console.log(this.imgUrl);
-              
-            })
-        },
 
+            })
+
+          //获取
+        },
+        //播发事件
         play() {
           this.isPlay = true
         },
         pause() {
           this.isPlay = false
+        },
+        
+        afterEnter(el){
+          el.style=''
         }
       },
       //增加自定义指令 获得焦点
       directives: {
-  focus: {
-    // 指令的定义
-    inserted: function (el) {
-      el.focus()
-    }
-  }
-}
+        focus: {
+          // 指令的定义
+          inserted: function (el) {
+            el.focus()
+          }
+        }
+      }
     })
   </script>
 
