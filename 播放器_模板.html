@@ -275,8 +275,7 @@
         <input type="text" class="inputTwo" v-model.trim="search" v-focus @keyup.enter="searchMusic" />
       </div>
       <div class="center_con">
-
-        <div class="song_wrapper" style="overflow: hidden">
+        <div class="song_wrapper">
           <!-- 添加列表动画效果 -->
           <transition-group name="list" tag="ul" class="song_list" v-on:after-enter="afterEnter">
             <li v-cloak v-for="(item, index) in musicList" :key="index" @click="playMusic(item)"
@@ -319,11 +318,6 @@
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
    -->
   <script src="./node_modules/axios/dist/axios.min.js"></script>
-
-  <script src="./lib/iscroll.js"></script>
-
-  <script src="./lib/jquery-1.12.4.js"></script>
-  <script src="./jedate-6.5.0(1)/dist/jedate.min.js"></script>
   <script>
     $(function () {
        
@@ -350,50 +344,11 @@
         imgUrl: '',
         //热门评论数组
 
-
-        commentList: [],
-
-        //定义iscroll 
-        myScroll: undefined,
-
-        leftScroll: undefined,
-
         commentList:[]
-//增加两侧的滚轮效果 使用iscroll
 
 
 
       },
-      //页面一开始加载默认数据
-      beforeMount() {
-        // 获取热搜歌曲
-        axios.get("https://autumnfish.cn/search/hot")
-          .then(res => {
-            console.log(res);
-            this.search = res.data.result.hots[0].first
-          })
-        console.log(this.search);
-
-        // 搜索该热门歌曲
-      },
-      mounted() {
-        this.myScroll = new IScroll('.comment_list', {
-          mouseWheel: true,
-          scrollbars: true
-
-        })
-        this.leftScroll = new IScroll('.song_wrapper', {
-          mouseWheel: true,
-          scrollbars: true
-
-        })
-        
-      },
-      updated() {
-        this.myScroll.refresh()
-        this.leftScroll.refresh()
-      },
-
       methods: {
         //搜索事件
         searchMusic() {
@@ -465,10 +420,8 @@
             el.focus()
           }
         }
-
-      },
-      //数据加载完成后 执行iscroll事件
-      })
+      }
+    })
   </script>
 
 </body>
