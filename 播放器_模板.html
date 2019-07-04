@@ -239,7 +239,7 @@
     <div class="play_wrap" id="player">
       <div class="search_bar">
         <img src="images/player_title.png" alt="" />
-        <input type="text" v-model.trim="search" @keyup.enter="searchMusic" />
+        <input type="text" v-model.trim="search" v-focus @keyup.enter="searchMusic" />
       </div>
       <div class="center_con">
         <div class="song_wrapper">
@@ -343,6 +343,15 @@
           this.isplay = false
         }
       },
+      //增加自定义指令 获得焦点
+      directives: {
+  focus: {
+    // 指令的定义
+    inserted: function (el) {
+      el.focus()
+    }
+  }
+}
     })
   </script>
 
