@@ -275,12 +275,11 @@
         <input type="text" class="inputTwo" v-model.trim="search" v-focus @keyup.enter="searchMusic" />
       </div>
       <div class="center_con">
-        <div class="song_wrapper"  style="overflow: hidden">
+        <div class="song_wrapper" style="overflow: hidden">
           <!-- 添加列表动画效果 -->
           <transition-group name="list" tag="ul" class="song_list" v-on:after-enter="afterEnter">
-            <li v-cloak v-for="(item, index) in musicList" :key="index" @click="playMusic(item)" 
-            :style="{transitinDelay:index*50+'ms'}"
-            >
+            <li v-cloak v-for="(item, index) in musicList" :key="index" @click="playMusic(item)"
+              :style="{transitinDelay:index*50+'ms'}">
               {{item.name}}---{{item.artists[0].name}}
             </li>
           </transition-group>
@@ -291,18 +290,18 @@
           <img src="images/player_bar.png" class="play_bar " :class="{playing:isPlay}" />
           <!-- 黑胶碟片 -->
           <img src="images/disc.png" class="disc autoRotate " :class="{playing:isPlay}" />
-          <img :src="imgUrl" class="cover autoRotate" :class="{playing:isPlay}" />
+          <img :src="imgUrl?imgUrl:'./images/cover.png'" class="cover autoRotate" :class="{playing:isPlay}" />
         </div>
         <div class="comment_list">
           <div>
             <dl v-for="(item, index) in commentList" :key="index">
               <dt>
                 <!-- 头像 -->
-                
+
                 <img :src="item.user.avatarUrl" alt="" />
               </dt>
               <!-- 昵称 -->
-                         
+
               <dd class="name">{{item.user.nickname}}</dd>
               <dd class="detail">
                 {{ item.content}}
@@ -351,31 +350,50 @@
         imgUrl: '',
         //热门评论数组
 
-        commentList:[],
+        commentList: [],
 
         //定义iscroll 
-        myScroll:undefined,
+        myScroll: undefined,
 
-        leftScroll:undefined
+        leftScroll: undefined
+
+
+
+      },
+      //页面一开始加载默认数据
+      beforeMount() {
+        // 获取热搜歌曲
+        axios.get("https://autumnfish.cn/search/hot")
+          .then(res => {
+            console.log(res);
+            this.search = res.data.result.hots[0].first
+          })
+        console.log(this.search);
+
+        // 搜索该热门歌曲
+       
+
 
 
 
       },
       mounted() {
-          this.myScroll = new IScroll('.comment_list', {
-            mouseWheel: true,
-            scrollbars: true
-          })
-          this.leftScroll = new IScroll('.song_wrapper', {
-            mouseWheel: true,
-            scrollbars: true
+        this.myScroll = new IScroll('.comment_list', {
+          mouseWheel: true,
+          scrollbars: true
 
-          })
-        },
-        updated() {
-          this.myScroll.refresh()
-          this.leftScroll.refresh()
-        },
+        })
+        this.leftScroll = new IScroll('.song_wrapper', {
+          mouseWheel: true,
+          scrollbars: true
+
+        })
+        
+      },
+      updated() {
+        this.myScroll.refresh()
+        this.leftScroll.refresh()
+      },
       methods: {
         //搜索事件
         searchMusic() {
@@ -397,13 +415,13 @@
         playMusic(item) {
           console.log(item.id)
           // Make a request for a user with a given ID
-          //获取歌曲列表
+          //获取歌曲封面
           axios.get(`https://autumnfish.cn/song/url?id=${item.id}`)
             .then((res) => {
               // handle succes
               this.musicUrl = res.data.data[0].url
             })
-           
+
           //获取封面地址
           axios.get(`https://autumnfish.cn/album?id=${item.album.id}`)
             .then((res) => {
@@ -416,16 +434,16 @@
 
           //获取热门评论
           axios.get("https://autumnfish.cn/comment/hot", {
-            params: {
-              id: item.id,
-              type:0
-            }
-          })
-          .then(res => {
-            console.log(res);
-        this.commentList=res.data.hotComments
+              params: {
+                id: item.id,
+                type: 0
+              }
+            })
+            .then(res => {
+              console.log(res);
+              this.commentList = res.data.hotComments
 
-          })
+            })
         },
         //播发事件
         play() {
@@ -434,9 +452,9 @@
         pause() {
           this.isPlay = false
         },
-        
-        afterEnter(el){
-          el.style=''
+
+        afterEnter(el) {
+          el.style = ''
         }
       },
       //增加自定义指令 获得焦点
@@ -449,7 +467,7 @@
         }
       },
       //数据加载完成后 执行iscroll事件
-     
+
 
     })
   </script>
