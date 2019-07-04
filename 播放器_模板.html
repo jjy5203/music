@@ -289,7 +289,7 @@
         musicSrc: '',
         imgUrl: '',
         musicUrl: '',
-        isplay: false,
+        isPlay: false,
 
 
       },
@@ -312,8 +312,6 @@
 
         playMusic(item) {
           console.log(item.id)
-
-
           // Make a request for a user with a given ID
           axios.get(`https://autumnfish.cn/song/url?id=${item.id}`)
             .then( (res)=> {
@@ -336,11 +334,12 @@
               
             })
         },
+
         play() {
-          this.isplay = true
+          this.isPlay = true
         },
         pause() {
-          this.isplay = false
+          this.isPlay = false
         }
       },
       //增加自定义指令 获得焦点
